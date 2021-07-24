@@ -7,3 +7,16 @@
 
 # Local History for Visual Studio Code
 .history/
+Approach.md
+.vscode/launch.json
+.vscode/tasks.json
+obj/poke-index.csproj.nuget.dgspec.json
+obj/poke-index.csproj.nuget.g.props
+obj/poke-index.csproj.nuget.g.targets
+obj/project.assets.json
+obj/project.nuget.cache
+test/obj/project.assets.json
+test/obj/project.nuget.cache
+test/obj/test.csproj.nuget.dgspec.json
+test/obj/test.csproj.nuget.g.props
+test/obj/test.csproj.nuget.g.targets
