@@ -1,0 +1,83 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: Pokemon Index API
+  license:
+    name: Apache 2.0
+servers:
+  - url: http://localhost/v1
+paths:
+  /pokemon/{pokemonName}:
+    get:
+      summary: Returns pokemon name, description, habitat and legendary status
+      operationId: showPokemonByName
+      parameters:
+        - name: pokemonName
+          in: path
+          required: true
+          description: The name of the pokemon to retrieve
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Expected response to a valid request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Pokemon"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /pokemon/translated/{pokemonName}:
+    get:
+      summary: Returns pokemon name, translated description, habitat and legendary status
+      operationId: showTranslatedPokemonByName
+      parameters:
+        - name: pokemonName
+          in: path
+          required: true
+          description: The name of the pokemon to retrieve
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Expected response to a valid request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Pokemon"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  schemas:
+    Pokemon:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        habitat:
+          type: string
+        isLegendary:
+          type: boolean
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
