@@ -21,10 +21,10 @@ using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using IO.Swagger.Filters;
+using PokeIndex.Filters;
 
 
-namespace IO.Swagger
+namespace PokeIndex
 {
     /// <summary>
     /// Startup
@@ -79,9 +79,9 @@ namespace IO.Swagger
                         {
                            Name = "Swagger Codegen Contributors",
                            Url = new Uri("https://github.com/swagger-api/swagger-codegen"),
-                           Email = ""
+                           Email = "martin@martineddington.net"
                         },
-                        TermsOfService = new Uri("")
+                        TermsOfService = new Uri("https://www.apache.org/licenses/LICENSE-2.0")
                     });
                     c.CustomSchemaIds(type => type.FullName);
                     c.IncludeXmlComments($"{AppContext.BaseDirectory}{Path.DirectorySeparatorChar}{_hostingEnv.ApplicationName}.xml");
@@ -91,6 +91,16 @@ namespace IO.Swagger
                     // Include DataAnnotation attributes on Controller Action parameters as Swagger validation rules (e.g required, pattern, ..)
                     // Use [ValidateModelState] on Actions to actually validate it in C# as well!
                     c.OperationFilter<GeneratePathParamsValidationFilter>();
+                });
+
+                // Add named HttpClients for the Pokedex and Translate APIs
+                services.AddHttpClient("pokedex", c => 
+                {
+                    c.BaseAddress = new Uri("https://pokeapi.co/api/v2/");
+                });
+                services.AddHttpClient("translate", c => 
+                {
+                    c.BaseAddress = new Uri("https://api.funtranslations.com/translate/");
                 });
         }
 

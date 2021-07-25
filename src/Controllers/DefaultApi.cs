@@ -9,17 +9,19 @@
  */
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
-using IO.Swagger.Attributes;
+using PokeIndex.Attributes;
 
 using Microsoft.AspNetCore.Authorization;
-using IO.Swagger.Models;
+using PokeIndex.Models;
+using PokeIndex.Helpers;
 
-namespace IO.Swagger.Controllers
+namespace PokeIndex.Controllers
 { 
     /// <summary>
     /// 
@@ -27,31 +29,42 @@ namespace IO.Swagger.Controllers
     [ApiController]
     public class DefaultApiController : ControllerBase
     { 
+        private readonly IHttpClientFactory _clientFactory;
+    
+        /// <summary>
+        /// Constructor allows dependancy injection of named clients from the factory.
+        /// </summary>
+        public DefaultApiController(IHttpClientFactory clientFactory)
+        {
+            _clientFactory = clientFactory;
+        }
         /// <summary>
         /// Returns pokemon name, description, habitat and legendary status
         /// </summary>
         /// <param name="pokemonName">The name of the pokemon to retrieve</param>
         /// <response code="200">Expected response to a valid request</response>
         /// <response code="0">unexpected error</response>
+
+        
         [HttpGet]
         [Route("/v1/pokemon/{pokemonName}")]
         [ValidateModelState]
         [SwaggerOperation("ShowPokemonByName")]
         [SwaggerResponse(statusCode: 200, type: typeof(Pokemon), description: "Expected response to a valid request")]
         [SwaggerResponse(statusCode: 0, type: typeof(Error), description: "unexpected error")]
-        public virtual IActionResult ShowPokemonByName([FromRoute][Required]string pokemonName)
+    
+        public IActionResult ShowPokemonByName([FromRoute][Required]string pokemonName)
         { 
             //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
             // return StatusCode(200, default(Pokemon));
 
             //TODO: Uncomment the next line to return response 0 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
             // return StatusCode(0, default(Error));
-            string exampleJson = null;
-            exampleJson = "{\n  \"habitat\" : \"habitat\",\n  \"name\" : \"name\",\n  \"description\" : \"description\",\n  \"isLegendary\" : true\n}";
+
             
-                        var example = exampleJson != null
-                        ? JsonConvert.DeserializeObject<Pokemon>(exampleJson)
-                        : default(Pokemon);            //TODO: Change the data returned
+            var helper = new PokedexClientHelper(_clientFactory);
+            var example = helper.GetPokemon(pokemonName);
+
             return new ObjectResult(example);
         }
 
