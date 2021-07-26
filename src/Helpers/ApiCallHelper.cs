@@ -19,17 +19,17 @@ namespace PokeIndex.Helpers
                 responseModel.Status = (int?) response.StatusCode;
                 responseModel.Succeeded = response.IsSuccessStatusCode;
 
-                if (responseModel.Succeeded)
-                {
+                //if (responseModel.Succeeded)
+                //{
                     using var responseStream = await response.Content.ReadAsStreamAsync();
                     var reader = new StreamReader(responseStream);
                     responseModel.APIResponse = reader.ReadToEnd();
-                }
-                else
-                {
+                //}
+                //else
+                //{
                     // Should log error here.
                  
-                }
+                //}
                 return responseModel;
 
         }

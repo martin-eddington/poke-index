@@ -22,6 +22,7 @@ using Newtonsoft.Json.Serialization;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using PokeIndex.Filters;
+using PokeIndex.Constants;
 
 
 namespace PokeIndex
@@ -94,11 +95,11 @@ namespace PokeIndex
                 });
 
                 // Add named HttpClients for the Pokedex and Translate APIs
-                services.AddHttpClient("pokedex", c => 
+                services.AddHttpClient(APIs.POKEDEX, c => 
                 {
                     c.BaseAddress = new Uri("https://pokeapi.co/api/v2/");
                 });
-                services.AddHttpClient("translate", c => 
+                services.AddHttpClient(APIs.TRANSLATE, c => 
                 {
                     c.BaseAddress = new Uri("https://api.funtranslations.com/translate/");
                 });

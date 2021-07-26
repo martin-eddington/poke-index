@@ -1,7 +1,6 @@
 using System.Net.Http;
-using System.Threading.Tasks;
-using System.IO;
 using PokeIndex.Models;
+using PokeIndex.Constants;
 using Newtonsoft.Json.Linq;
 
 
@@ -32,7 +31,7 @@ namespace PokeIndex.Helpers
             $"pokemon/{PokemonName}"
             );
 
-        var client = _clientFactory.CreateClient("pokedex");
+        var client = _clientFactory.CreateClient(APIs.POKEDEX);
         var callHelper = new ApiCallHelper();
         var result = callHelper.MakeCall(client, request).Result;
 

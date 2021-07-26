@@ -20,6 +20,7 @@ using PokeIndex.Attributes;
 using Microsoft.AspNetCore.Authorization;
 using PokeIndex.Models;
 using PokeIndex.Helpers;
+using PokeIndex.Constants;
 
 namespace PokeIndex.Controllers
 { 
@@ -55,13 +56,7 @@ namespace PokeIndex.Controllers
     
         public IActionResult ShowPokemonByName([FromRoute][Required]string pokemonName)
         { 
-            //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(200, default(Pokemon));
-
-            //TODO: Uncomment the next line to return response 0 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(0, default(Error));
-
-            
+           
             var helper = new PokedexClientHelper(_clientFactory);
             var example = helper.GetPokemon(pokemonName);
 
@@ -82,18 +77,29 @@ namespace PokeIndex.Controllers
         [SwaggerResponse(statusCode: 0, type: typeof(Error), description: "unexpected error")]
         public virtual IActionResult ShowTranslatedPokemonByName([FromRoute][Required]string pokemonName)
         { 
-            //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(200, default(Pokemon));
+            var pokemon = GetPokemon(pokemonName);
+            pokemon = GetTranslation(pokemon);
 
-            //TODO: Uncomment the next line to return response 0 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(0, default(Error));
-            string exampleJson = null;
-            exampleJson = "{\n  \"habitat\" : \"habitat\",\n  \"name\" : \"name\",\n  \"description\" : \"description\",\n  \"isLegendary\" : true\n}";
+            return new ObjectResult(pokemon);
+        }
+
+        public Pokemon GetPokemon(string pokemonName)
+        {
+            var helper = new PokedexClientHelper(_clientFactory);
+            return helper.GetPokemon(pokemonName);
+        }
+
+        public Pokemon GetTranslation(Pokemon pokemon)
+        {
+            var translatehelper = new TranslateClientHelper(_clientFactory);
+            var translationType = TranslationTypes.SHAKESPEARE;
             
-                        var example = exampleJson != null
-                        ? JsonConvert.DeserializeObject<Pokemon>(exampleJson)
-                        : default(Pokemon);            //TODO: Change the data returned
-            return new ObjectResult(example);
+            if(pokemon.Habitat == "cave" || pokemon.IsLegendary == true)
+            {
+                translationType = TranslationTypes.YODA;
+            }
+
+            return translatehelper.TranslatePokemon(pokemon, translationType);
         }
     }
 }
