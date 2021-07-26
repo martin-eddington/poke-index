@@ -21,10 +21,14 @@ namespace PokeIndex.Helpers
         {
             _clientFactory = clientFactory;
         }
+
+        /// <summary>
+        /// Function to call helper for Translation API
+        /// and manage the results.
+        /// </summary>
         public Pokemon TranslatePokemon(Pokemon pokemon, string translationType)
         {
-            var populatedModel = new Pokemon();
-            var content = pokemon.Description.Replace("\n", " ").Replace("\r", " ").Replace("\f", " ");
+            var content = pokemon.Description;
             content = "{" + $"\"text\":\"{content}\"" + "}";
             var request = new HttpRequestMessage(
             HttpMethod.Post,
@@ -47,6 +51,6 @@ namespace PokeIndex.Helpers
             return pokemon;
         }
 
-        }
+    }
 
 }

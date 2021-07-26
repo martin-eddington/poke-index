@@ -21,7 +21,7 @@ namespace PokeIndex.Helpers
     }
 
     /// <summary>
-    /// Task to get the Pokemon from the external API
+    /// Function to get the Pokemon from the external API
     /// </summary>
     public Pokemon GetPokemon(string PokemonName)
     {
@@ -53,7 +53,14 @@ namespace PokeIndex.Helpers
                 jsonObject = JObject.Parse(result.APIResponse);
                 populatedModel.IsLegendary= (bool?) jsonObject.SelectToken("is_legendary");
                 populatedModel.Habitat = jsonObject.SelectToken("habitat.name").ToString();
+
+                // ToDo - make sure we're using English if it's not first entry
                 populatedModel.Description = jsonObject.SelectToken("flavor_text_entries[0].flavor_text").ToString();
+                // quick clean-up of line breaks and form feeds from the description
+                populatedModel.Description = populatedModel.Description
+                                                .Replace("\n", " ")
+                                                .Replace("\r", " ")
+                                                .Replace("\f", " ");
             }
         }
         return populatedModel;

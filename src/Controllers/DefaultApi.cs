@@ -83,13 +83,20 @@ namespace PokeIndex.Controllers
             return new ObjectResult(pokemon);
         }
 
-        public Pokemon GetPokemon(string pokemonName)
+        /// <summary>
+        /// Calls a helper to return a Pokemon Object from the name
+        /// </summary>
+        private Pokemon GetPokemon(string pokemonName)
         {
             var helper = new PokedexClientHelper(_clientFactory);
             return helper.GetPokemon(pokemonName);
         }
 
-        public Pokemon GetTranslation(Pokemon pokemon)
+        /// <summary>
+        /// Calls a helper to return a translated Pokemon Object from an untranslated one
+        /// returns same untranslated pokemon object if unable to translate it
+        /// </summary>
+        private Pokemon GetTranslation(Pokemon pokemon)
         {
             var translatehelper = new TranslateClientHelper(_clientFactory);
             var translationType = TranslationTypes.SHAKESPEARE;
