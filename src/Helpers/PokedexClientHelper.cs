@@ -2,6 +2,7 @@ using System.Net.Http;
 using PokeIndex.Models;
 using PokeIndex.Constants;
 using Newtonsoft.Json.Linq;
+using System.Linq;
 
 
 namespace PokeIndex.Helpers
@@ -54,8 +55,13 @@ namespace PokeIndex.Helpers
                 populatedModel.IsLegendary= (bool?) jsonObject.SelectToken("is_legendary");
                 populatedModel.Habitat = jsonObject.SelectToken("habitat.name").ToString();
 
-                // ToDo - make sure we're using English if it's not first entry
-                populatedModel.Description = jsonObject.SelectToken("flavor_text_entries[0].flavor_text").ToString();
+                // Make sure we're using English if it's not first entry
+                var flavorTextArray = (JArray)jsonObject.SelectToken("flavor_text_entries");
+                var englishTextArray = from item in flavorTextArray.Children()
+                where item["language"]["name"].ToString() == "en"
+                select item["flavor_text"];
+
+                populatedModel.Description = englishTextArray.First().ToString();
                 // quick clean-up of line breaks and form feeds from the description
                 populatedModel.Description = populatedModel.Description
                                                 .Replace("\n", " ")

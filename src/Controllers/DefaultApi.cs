@@ -44,7 +44,7 @@ namespace PokeIndex.Controllers
         /// </summary>
         /// <param name="pokemonName">The name of the pokemon to retrieve</param>
         /// <response code="200">Expected response to a valid request</response>
-        /// <response code="0">unexpected error</response>
+        /// <response code="404">No such Pokemon</response>
 
         
         [HttpGet]
@@ -52,8 +52,9 @@ namespace PokeIndex.Controllers
         [ValidateModelState]
         [SwaggerOperation("ShowPokemonByName")]
         [SwaggerResponse(statusCode: 200, type: typeof(Pokemon), description: "Expected response to a valid request")]
-        [SwaggerResponse(statusCode: 0, type: typeof(Error), description: "unexpected error")]
-    
+        [SwaggerResponse(statusCode: 404, type: typeof(Error), description: "No such Pokemon")]
+
+
         public IActionResult ShowPokemonByName([FromRoute][Required]string pokemonName)
         { 
            
@@ -68,13 +69,13 @@ namespace PokeIndex.Controllers
         /// </summary>
         /// <param name="pokemonName">The name of the pokemon to retrieve</param>
         /// <response code="200">Expected response to a valid request</response>
-        /// <response code="0">unexpected error</response>
+        /// <response code="404">No such Pokemon</response>
         [HttpGet]
         [Route("/v1/pokemon/translated/{pokemonName}")]
         [ValidateModelState]
         [SwaggerOperation("ShowTranslatedPokemonByName")]
         [SwaggerResponse(statusCode: 200, type: typeof(Pokemon), description: "Expected response to a valid request")]
-        [SwaggerResponse(statusCode: 0, type: typeof(Error), description: "unexpected error")]
+        [SwaggerResponse(statusCode: 404, type: typeof(Error), description: "No such Pokemon")]
         public virtual IActionResult ShowTranslatedPokemonByName([FromRoute][Required]string pokemonName)
         { 
             var pokemon = GetPokemon(pokemonName);
@@ -86,6 +87,7 @@ namespace PokeIndex.Controllers
         /// <summary>
         /// Calls a helper to return a Pokemon Object from the name
         /// </summary>
+        /// <param name="pokemonName"></param>
         private Pokemon GetPokemon(string pokemonName)
         {
             var helper = new PokedexClientHelper(_clientFactory);
@@ -96,6 +98,7 @@ namespace PokeIndex.Controllers
         /// Calls a helper to return a translated Pokemon Object from an untranslated one
         /// returns same untranslated pokemon object if unable to translate it
         /// </summary>
+        /// <param name="pokemon"></param>
         private Pokemon GetTranslation(Pokemon pokemon)
         {
             var translatehelper = new TranslateClientHelper(_clientFactory);
