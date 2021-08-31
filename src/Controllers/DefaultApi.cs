@@ -57,11 +57,14 @@ namespace PokeIndex.Controllers
 
         public IActionResult ShowPokemonByName([FromRoute][Required]string pokemonName)
         { 
-           
-            var helper = new PokedexClientHelper(_clientFactory);
-            var example = helper.GetPokemon(pokemonName);
-
-            return new ObjectResult(example);
+           try {
+            var result = GetPokemon(pokemonName);
+            return new ObjectResult(result);
+           }
+           catch (PokemonNotFoundException e)
+           {
+             return StatusCode(404,new Error(){Code=404, Message="No such Pokemon"}); 
+           }
         }
 
         /// <summary>
@@ -77,13 +80,19 @@ namespace PokeIndex.Controllers
         [SwaggerResponse(statusCode: 200, type: typeof(Pokemon), description: "Expected response to a valid request")]
         [SwaggerResponse(statusCode: 404, type: typeof(Error), description: "No such Pokemon")]
         public virtual IActionResult ShowTranslatedPokemonByName([FromRoute][Required]string pokemonName)
-        { 
-            var pokemon = GetPokemon(pokemonName);
-            pokemon = GetTranslation(pokemon);
-
-            return new ObjectResult(pokemon);
+        {   
+         
+           try {
+            var result = GetPokemon(pokemonName);
+            result = GetTranslation(result);
+            return new ObjectResult(result);
+           }
+           catch (PokemonNotFoundException e)
+           {
+             return StatusCode(404,new Error(){Code=404, Message="No such Pokemon"}); 
+           }
         }
-
+        
         /// <summary>
         /// Calls a helper to return a Pokemon Object from the name
         /// </summary>

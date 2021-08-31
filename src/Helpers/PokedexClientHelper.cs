@@ -68,11 +68,14 @@ namespace PokeIndex.Helpers
                                                 .Replace("\n", " ")
                                                 .Replace("\r", " ")
                                                 .Replace("\f", " ");
+            } else {
+                throw new PokemonNotFoundException();
             }
+        } else {
+            throw new PokemonNotFoundException();
         }
         return populatedModel;
         }
-       
     }
 
     
