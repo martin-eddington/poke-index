@@ -56,6 +56,7 @@ namespace PokeIndex.Helpers
                 populatedModel.Habitat = jsonObject.SelectToken("habitat.name").ToString();
 
                 // Make sure we're using English if it's not first entry
+                // Not entirely sure LINQ is the best way - maybe there's a better way using NewtonSoft stuff.
                 var flavorTextArray = (JArray)jsonObject.SelectToken("flavor_text_entries");
                 var englishTextArray = from item in flavorTextArray.Children()
                 where item["language"]["name"].ToString() == "en"
