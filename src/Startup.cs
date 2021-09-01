@@ -75,7 +75,7 @@ namespace PokeIndex
                     {
                         Version = "1.0.0",
                         Title = "Pokemon Index API",
-                        Description = "Pokemon Index API (ASP.NET Core 3.1)",
+                        Description = "Pokemon Index API (.NET 5.0)",
                         Contact = new OpenApiContact()
                         {
                            Name = "Swagger Codegen Contributors",
@@ -97,11 +97,11 @@ namespace PokeIndex
                 // Add named HttpClients for the Pokedex and Translate APIs
                 services.AddHttpClient(APIs.POKEDEX, c => 
                 {
-                    c.BaseAddress = new Uri("https://pokeapi.co/api/v2/");
+                    c.BaseAddress = new Uri(BASE_URLS.POKEDEX);
                 });
                 services.AddHttpClient(APIs.TRANSLATE, c => 
                 {
-                    c.BaseAddress = new Uri("https://api.funtranslations.com/translate/");
+                    c.BaseAddress = new Uri(BASE_URLS.TRANSLATE);
                 });
         }
 

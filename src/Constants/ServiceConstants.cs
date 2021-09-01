@@ -12,6 +12,18 @@ namespace PokeIndex.Constants
 
     }
 
+     /// <summary>
+    /// Class to hold API base URL constants
+    /// </summary>
+    public class BASE_URLS {
+        /// <constant> BaseURL for Pokemon data lookup API </constant> ///
+        public const string POKEDEX = "https://pokeapi.co/api/v2/";
+
+        /// <constant> BaseURL for Translation API </constant> ///
+        public const string TRANSLATE = "https://api.funtranslations.com/translate/";
+
+    }
+
     /// <summary>
     /// Class to hold strings to define Translation API constants.
     /// </summary>
